@@ -4,7 +4,22 @@ info:
   contact: {}
   description: This is a block explorer server. You can visit the GitHub repository
     at https://github.com/Ethernal-Tech/blockchain-explorer-api
-  title: Go + Gin Block Explorer API
+  title: Block Explorer API
   version: "1.0"
-paths: {}
+paths:
+  /api/helloworld:
+    get:
+      consumes:
+      - application/json
+      description: do ping
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: ping example
+      tags:
+      - example
 swagger: "2.0"

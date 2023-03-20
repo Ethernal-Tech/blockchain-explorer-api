@@ -1,8 +1,9 @@
 package main
 
 import (
-	_ "ethernal/explorer-api/docs"
+	"ethernal/explorer-api/docs"
 	"fmt"
+	"net/http"
 	"runtime"
 
 	"github.com/gin-gonic/gin"
@@ -10,7 +11,22 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
-// @title Go + Gin Block Explorer API
+// @BasePath /api/v1
+
+// PingExample godoc
+// @Summary ping example
+// @Schemes
+// @Description do ping
+// @Tags example
+// @Accept json
+// @Produce json
+// @Success 200 {string} Helloworld
+// @Router /api/helloworld [get]
+func Helloworld(g *gin.Context) {
+	g.JSON(http.StatusOK, "helloworld")
+}
+
+// @title Block Explorer API
 // @version 1.0
 // @description This is a block explorer server. You can visit the GitHub repository at https://github.com/Ethernal-Tech/blockchain-explorer-api
 
@@ -19,6 +35,15 @@ import (
 func main() {
 	fmt.Println("The number of CPU Cores:", runtime.NumCPU())
 	server := gin.Default()
-	server.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	docs.SwaggerInfo.BasePath = "/api/v1"
+	v1 := server.Group("/api/v1")
+	{
+		eg := v1.Group("/example")
+		{
+			eg.GET("/helloworld", Helloworld)
+		}
+	}
+
+	server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	server.Run("localhost:8888")
 }
