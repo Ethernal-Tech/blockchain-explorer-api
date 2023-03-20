@@ -1,0 +1,10 @@
+basePath: /
+host: localhost:8888
+info:
+  contact: {}
+  description: This is a block explorer server. You can visit the GitHub repository
+    at https://github.com/Ethernal-Tech/blockchain-explorer-api
+  title: Go + Gin Block Explorer API
+  version: "1.0"
+paths: {}
+swagger: "2.0"
