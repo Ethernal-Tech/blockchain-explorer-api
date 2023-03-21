@@ -7,7 +7,7 @@ info:
   title: Block Explorer API
   version: "1.0"
 paths:
-  /api/helloworld:
+  /v1/example/helloworld:
     get:
       consumes:
       - application/json
@@ -22,4 +22,19 @@ paths:
       summary: ping example
       tags:
       - example
+  /v2/example/helloworld:
+    get:
+      consumes:
+      - application/json
+      description: do ping
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: ping example
+      tags:
+      - example2
 swagger: "2.0"

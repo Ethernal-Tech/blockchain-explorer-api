@@ -9,7 +9,7 @@
     "host": "localhost:8888",
     "basePath": "/",
     "paths": {
-        "/api/helloworld": {
+        "/v1/example/helloworld": {
             "get": {
                 "description": "do ping",
                 "consumes": [
@@ -20,6 +20,29 @@
                 ],
                 "tags": [
                     "example"
+                ],
+                "summary": "ping example",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/example/helloworld": {
+            "get": {
+                "description": "do ping",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "example2"
                 ],
                 "summary": "ping example",
                 "responses": {

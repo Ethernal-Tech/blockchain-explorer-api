@@ -11,7 +11,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
-// @BasePath /api/v1
+// @BasePath /api
 
 // PingExample godoc
 // @Summary ping example
@@ -21,9 +21,24 @@ import (
 // @Accept json
 // @Produce json
 // @Success 200 {string} Helloworld
-// @Router /api/helloworld [get]
+// @Router /v1/example/helloworld [get]
 func Helloworld(g *gin.Context) {
 	g.JSON(http.StatusOK, "helloworld")
+}
+
+// @BasePath /api
+
+// PingExample godoc
+// @Summary ping example
+// @Schemes
+// @Description do ping
+// @Tags example2
+// @Accept json
+// @Produce json
+// @Success 200 {string} Helloworld
+// @Router /v2/example/helloworld [get]
+func Helloworldv2(g *gin.Context) {
+	g.JSON(http.StatusOK, "helloworld v2")
 }
 
 // @title Block Explorer API
@@ -35,12 +50,20 @@ func Helloworld(g *gin.Context) {
 func main() {
 	fmt.Println("The number of CPU Cores:", runtime.NumCPU())
 	server := gin.Default()
-	docs.SwaggerInfo.BasePath = "/api/v1"
+	docs.SwaggerInfo.BasePath = "/api"
 	v1 := server.Group("/api/v1")
 	{
 		eg := v1.Group("/example")
 		{
 			eg.GET("/helloworld", Helloworld)
+		}
+	}
+
+	v2 := server.Group("/api/v2")
+	{
+		eg := v2.Group("/example")
+		{
+			eg.GET("/helloworld", Helloworldv2)
 		}
 	}
 

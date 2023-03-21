@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/helloworld": {
+        "/v1/example/helloworld": {
             "get": {
                 "description": "do ping",
                 "consumes": [
@@ -26,6 +26,29 @@ const docTemplate = `{
                 ],
                 "tags": [
                     "example"
+                ],
+                "summary": "ping example",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/example/helloworld": {
+            "get": {
+                "description": "do ping",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "example2"
                 ],
                 "summary": "ping example",
                 "responses": {
