@@ -1,4 +1,38 @@
-basePath: /
+basePath: /api
+definitions:
+  models.Transaction:
+    properties:
+      blockHash:
+        type: string
+      blockNUmber:
+        type: integer
+      contractAddress:
+        type: string
+      from:
+        type: string
+      gas:
+        type: integer
+      gasPrice:
+        type: integer
+      gasUsed:
+        type: integer
+      hash:
+        type: string
+      input:
+        type: string
+      nonce:
+        type: integer
+      status:
+        type: integer
+      timestamp:
+        type: integer
+      to:
+        type: string
+      transactionIndex:
+        type: integer
+      value:
+        type: string
+    type: object
 host: localhost:8888
 info:
   contact: {}
@@ -22,6 +56,56 @@ paths:
       summary: ping example
       tags:
       - example
+  /v1/transaction/hash/{txhash}:
+    get:
+      parameters:
+      - description: transaction hash
+        in: path
+        name: txhash
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Transaction'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get transaction by hash
+      tags:
+      - transaction
+  /v1/transaction/txinblock/{blocknumber}:
+    get:
+      parameters:
+      - description: block number
+        in: path
+        name: blocknumber
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Transaction'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get transactions in block
+      tags:
+      - transaction
   /v2/example/helloworld:
     get:
       consumes:
@@ -36,5 +120,5 @@ paths:
             type: string
       summary: ping example
       tags:
-      - example2
+      - example
 swagger: "2.0"

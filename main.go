@@ -1,17 +1,23 @@
 package main
 
 import (
-	"ethernal/explorer-api/docs"
-	"fmt"
+	"context"
+	"ethernal/explorer-api/configuration"
+	"ethernal/explorer-api/controllers"
+	"ethernal/explorer-api/database"
+	_ "ethernal/explorer-api/docs"
+	"ethernal/explorer-api/services"
 	"net/http"
-	"runtime"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"     // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
-// @BasePath /api
+var (
+	server                *gin.Engine
+	transactionController controllers.TransactionController
+)
 
 // PingExample godoc
 // @Summary ping example
@@ -26,13 +32,11 @@ func Helloworld(g *gin.Context) {
 	g.JSON(http.StatusOK, "helloworld")
 }
 
-// @BasePath /api
-
 // PingExample godoc
 // @Summary ping example
 // @Schemes
 // @Description do ping
-// @Tags example2
+// @Tags example
 // @Accept json
 // @Produce json
 // @Success 200 {string} Helloworld
@@ -46,16 +50,39 @@ func Helloworldv2(g *gin.Context) {
 // @description This is a block explorer server. You can visit the GitHub repository at https://github.com/Ethernal-Tech/blockchain-explorer-api
 
 // @host localhost:8888
-// @BasePath /
+// @BasePath /api
 func main() {
-	fmt.Println("The number of CPU Cores:", runtime.NumCPU())
-	server := gin.Default()
-	docs.SwaggerInfo.BasePath = "/api"
+	ctx := context.TODO()
+	configuration := configuration.Load()
+	database := database.Initialize(configuration)
+	transactionService := services.NewTransactionService(database, ctx)
+	transactionController = controllers.NewTransactionController(transactionService)
+
+	server = gin.Default()
+
+	// example of error handling using middleware
+	// server = gin.New()
+	// server.Use(gin.Logger(), gin.Recovery(), middleware.ErrorHandler)
+
+	routes()
+	// use ginSwagger middleware to serve the API docs
+	server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	server.Run("localhost:8888")
+}
+
+// routes defines endpoint paths and assigns the handler functions to them.
+func routes() {
 	v1 := server.Group("/api/v1")
 	{
 		eg := v1.Group("/example")
 		{
 			eg.GET("/helloworld", Helloworld)
+		}
+
+		transaction := v1.Group("/transaction")
+		{
+			transaction.GET("/hash/:txhash", transactionController.GetTransactionByHash)
+			transaction.GET("/txinblock/:blocknumber", transactionController.GetTransactionsInBlock)
 		}
 	}
 
@@ -66,7 +93,4 @@ func main() {
 			eg.GET("/helloworld", Helloworldv2)
 		}
 	}
-
-	server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	server.Run("localhost:8888")
 }

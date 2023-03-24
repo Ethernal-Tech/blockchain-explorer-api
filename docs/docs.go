@@ -38,6 +38,83 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/transaction/hash/{txhash}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "transaction"
+                ],
+                "summary": "Get transaction by hash",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "transaction hash",
+                        "name": "txhash",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Transaction"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/transaction/txinblock/{blocknumber}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "transaction"
+                ],
+                "summary": "Get transactions in block",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "block number",
+                        "name": "blocknumber",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Transaction"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/v2/example/helloworld": {
             "get": {
                 "description": "do ping",
@@ -48,7 +125,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "example2"
+                    "example"
                 ],
                 "summary": "ping example",
                 "responses": {
@@ -61,6 +138,58 @@ const docTemplate = `{
                 }
             }
         }
+    },
+    "definitions": {
+        "models.Transaction": {
+            "type": "object",
+            "properties": {
+                "blockHash": {
+                    "type": "string"
+                },
+                "blockNUmber": {
+                    "type": "integer"
+                },
+                "contractAddress": {
+                    "type": "string"
+                },
+                "from": {
+                    "type": "string"
+                },
+                "gas": {
+                    "type": "integer"
+                },
+                "gasPrice": {
+                    "type": "integer"
+                },
+                "gasUsed": {
+                    "type": "integer"
+                },
+                "hash": {
+                    "type": "string"
+                },
+                "input": {
+                    "type": "string"
+                },
+                "nonce": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "timestamp": {
+                    "type": "integer"
+                },
+                "to": {
+                    "type": "string"
+                },
+                "transactionIndex": {
+                    "type": "integer"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        }
     }
 }`
 
@@ -68,7 +197,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "localhost:8888",
-	BasePath:         "/",
+	BasePath:         "/api",
 	Schemes:          []string{},
 	Title:            "Block Explorer API",
 	Description:      "This is a block explorer server. You can visit the GitHub repository at https://github.com/Ethernal-Tech/blockchain-explorer-api",
