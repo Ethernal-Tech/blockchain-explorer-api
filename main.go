@@ -67,7 +67,7 @@ func main() {
 	routes()
 	// use ginSwagger middleware to serve the API docs
 	server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	server.Run("localhost:8888")
+	server.Run(":8888")
 }
 
 // routes defines endpoint paths and assigns the handler functions to them.
