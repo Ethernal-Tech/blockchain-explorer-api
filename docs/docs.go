@@ -196,11 +196,11 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8888",
+	Host:             "nswd.ddns.net:8888",
 	BasePath:         "/api",
 	Schemes:          []string{},
 	Title:            "Block Explorer API",
-	Description:      "This is a block explorer server. You can visit the GitHub repository at https://github.com/Ethernal-Tech/blockchain-explorer-api",
+	Description:      "This is a block explorer api. You can visit the GitHub repository at https://github.com/Ethernal-Tech/blockchain-explorer-api",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

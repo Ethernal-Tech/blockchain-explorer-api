@@ -9,6 +9,7 @@ import (
 	"ethernal/explorer-api/services"
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"     // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
@@ -59,6 +60,12 @@ func main() {
 	transactionController = controllers.NewTransactionController(transactionService)
 
 	server = gin.Default()
+
+	// same as
+	// config := cors.DefaultConfig()
+	// config.AllowAllOrigins = true
+	// router.Use(cors.New(config))
+	server.Use(cors.Default())
 
 	// example of error handling using middleware
 	// server = gin.New()
