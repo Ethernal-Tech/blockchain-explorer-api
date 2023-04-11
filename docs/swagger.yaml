@@ -1,10 +1,39 @@
 basePath: /api
 definitions:
+  models.Block:
+    properties:
+      difficulty:
+        type: string
+      extraData:
+        type: string
+      gasLimit:
+        type: integer
+      gasUsed:
+        type: integer
+      hash:
+        type: string
+      nonce:
+        type: string
+      number:
+        type: integer
+      parentHash:
+        type: string
+      size:
+        type: integer
+      timestamp:
+        type: integer
+      totalDifficulty:
+        type: string
+      transactionsCount:
+        type: integer
+      validator:
+        type: string
+    type: object
   models.Transaction:
     properties:
       blockHash:
         type: string
-      blockNUmber:
+      blockNumber:
         type: integer
       contractAddress:
         type: string
@@ -41,6 +70,62 @@ info:
   title: Block Explorer API
   version: "1.0"
 paths:
+  /v1/block/hash/{blockhash}:
+    get:
+      parameters:
+      - description: block hash
+        in: path
+        name: blockhash
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Block'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get block by hash
+      tags:
+      - block
+  /v1/block/number/{blocknumber}:
+    get:
+      parameters:
+      - description: block number
+        in: path
+        name: blocknumber
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Block'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get block by number
+      tags:
+      - block
   /v1/example/helloworld:
     get:
       consumes:
@@ -56,6 +141,54 @@ paths:
       summary: ping example
       tags:
       - example
+  /v1/transaction/address/{address}:
+    get:
+      parameters:
+      - description: address
+        in: path
+        name: address
+        required: true
+        type: string
+      - description: block number to start searching for transactions
+        in: query
+        name: startBlock
+        type: integer
+      - description: block number to stop searching for transactions
+        in: query
+        name: endBlock
+        type: integer
+      - description: page number
+        in: query
+        name: page
+        type: integer
+      - description: number of transactions displayed per page
+        in: query
+        name: perPage
+        type: integer
+      - description: use asc to sort by ascending and desc to sort by descending
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Transaction'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get transactions by address
+      tags:
+      - transaction
   /v1/transaction/hash/{txhash}:
     get:
       parameters:
@@ -99,6 +232,10 @@ paths:
             items:
               $ref: '#/definitions/models.Transaction'
             type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
         "500":
           description: Internal Server Error
           schema:

@@ -15,6 +15,92 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/v1/block/hash/{blockhash}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "block"
+                ],
+                "summary": "Get block by hash",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "block hash",
+                        "name": "blockhash",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Block"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/block/number/{blocknumber}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "block"
+                ],
+                "summary": "Get block by number",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "block number",
+                        "name": "blocknumber",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Block"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/example/helloworld": {
             "get": {
                 "description": "do ping",
@@ -31,6 +117,79 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/transaction/address/{address}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "transaction"
+                ],
+                "summary": "Get transactions by address",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "address",
+                        "name": "address",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "block number to start searching for transactions",
+                        "name": "startBlock",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "block number to stop searching for transactions",
+                        "name": "endBlock",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "number of transactions displayed per page",
+                        "name": "perPage",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "use asc to sort by ascending and desc to sort by descending",
+                        "name": "sort",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Transaction"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "type": "string"
                         }
@@ -106,6 +265,12 @@ const docTemplate = `{
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -140,13 +305,57 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.Block": {
+            "type": "object",
+            "properties": {
+                "difficulty": {
+                    "type": "string"
+                },
+                "extraData": {
+                    "type": "string"
+                },
+                "gasLimit": {
+                    "type": "integer"
+                },
+                "gasUsed": {
+                    "type": "integer"
+                },
+                "hash": {
+                    "type": "string"
+                },
+                "nonce": {
+                    "type": "string"
+                },
+                "number": {
+                    "type": "integer"
+                },
+                "parentHash": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "integer"
+                },
+                "timestamp": {
+                    "type": "integer"
+                },
+                "totalDifficulty": {
+                    "type": "string"
+                },
+                "transactionsCount": {
+                    "type": "integer"
+                },
+                "validator": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Transaction": {
             "type": "object",
             "properties": {
                 "blockHash": {
                     "type": "string"
                 },
-                "blockNUmber": {
+                "blockNumber": {
                     "type": "integer"
                 },
                 "contractAddress": {
@@ -196,11 +405,11 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "nswd.ddns.net:8888",
+	Host:             "localhost:8888",
 	BasePath:         "/api",
 	Schemes:          []string{},
 	Title:            "Block Explorer API",
-	Description:      "This is a block explorer api. You can visit the GitHub repository at https://github.com/Ethernal-Tech/blockchain-explorer-api",
+	Description:      "This is a block explorer server. You can visit the GitHub repository at https://github.com/Ethernal-Tech/blockchain-explorer-api",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

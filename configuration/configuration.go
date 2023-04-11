@@ -14,6 +14,8 @@ type Configuration struct {
 	DbPort               string
 	DbName               string
 	CallTimeoutInSeconds uint
+	PaginationMaxRecords int
+	PaginationSort       string
 }
 
 // Load returns an initialized Configuration instance.
@@ -37,6 +39,8 @@ func Load() *Configuration {
 		DbPort:               viper.GetString("DB_PORT"),
 		DbName:               viper.GetString("DB_NAME"),
 		CallTimeoutInSeconds: viper.GetUint("CALL_TIMEOUT_IN_SECONDS"),
+		PaginationMaxRecords: viper.GetInt("PAGINATION_MAX_RECORDS"),
+		PaginationSort:       viper.GetString("PAGINATION_SORT"),
 	}
 
 	return &configuration
