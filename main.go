@@ -19,6 +19,7 @@ var (
 	server                *gin.Engine
 	transactionController controllers.TransactionController
 	blockController       controllers.BlockController
+	logController         controllers.LogController
 )
 
 // PingExample godoc
@@ -61,6 +62,8 @@ func main() {
 	transactionController = controllers.NewTransactionController(transactionService, configuration)
 	blockService := services.NewBlockService(database, ctx)
 	blockController = controllers.NewBlockController(blockService)
+	logService := services.NewLogService(database, ctx)
+	logController = controllers.NewLogController(logService, configuration)
 
 	server = gin.Default()
 
@@ -100,6 +103,12 @@ func routes() {
 		{
 			block.GET("/number/:blocknumber", blockController.GetBlockByNumber)
 			block.GET("/hash/:blockhash", blockController.GetBlockByHash)
+		}
+
+		log := v1.Group("/log")
+		{
+			log.GET("/transactionhash/:transactionhash", logController.GetLogsByTransactionHash)
+			log.GET("", logController.GetLogs)
 		}
 	}
 

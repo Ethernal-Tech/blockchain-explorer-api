@@ -124,6 +124,175 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/log": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "log"
+                ],
+                "summary": "Get logs",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "address",
+                        "name": "address",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "block number to start searching for logs",
+                        "name": "startBlock",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "block number to stop searching for logs",
+                        "name": "endBlock",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "topic0",
+                        "name": "topic0",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "topic1",
+                        "name": "topic1",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "topic2",
+                        "name": "topic2",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "topic3",
+                        "name": "topic3",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "operator and|or between topic0 \u0026 topic1",
+                        "name": "topic0_1_opr",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "operator and|or between topic0 \u0026 topic2",
+                        "name": "topic0_2_opr",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "operator and|or between topic0 \u0026 topic3",
+                        "name": "topic0_3_opr",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "operator and|or between topic1 \u0026 topic2",
+                        "name": "topic1_2_opr",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "operator and|or between topic1 \u0026 topic3",
+                        "name": "topic1_3_opr",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "operator and|or between topic2 \u0026 topic3",
+                        "name": "topic2_3_opr",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "number of logs displayed per page",
+                        "name": "perPage",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "use asc to sort by ascending and desc to sort by descending",
+                        "name": "sort",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Log"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/log/transactionhash/{transactionhash}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "log"
+                ],
+                "summary": "Get logs by transaction hash",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "transaction hash",
+                        "name": "transactionhash",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Log"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/transaction/address/{address}": {
             "get": {
                 "produces": [
@@ -345,6 +514,35 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "validator": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Log": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "blockHash": {
+                    "type": "string"
+                },
+                "blockNumber": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "string"
+                },
+                "logIndex": {
+                    "type": "integer"
+                },
+                "topics": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "transactionHash": {
                     "type": "string"
                 }
             }

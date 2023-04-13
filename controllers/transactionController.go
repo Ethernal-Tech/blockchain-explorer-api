@@ -137,24 +137,32 @@ func GetPaginationData(context *gin.Context, maxRecords int, order string) *mode
 		Sort:       order,
 	}
 
-	startBlock := context.Query("startBlock")
-	if startBlock != "" {
-		paginationData.StartBlock, _ = strconv.ParseInt(startBlock, 10, 64)
+	startBlockStr := context.Query("startBlock")
+	if startBlockStr != "" {
+		if startBlock, err := strconv.ParseInt(startBlockStr, 10, 64); err == nil {
+			paginationData.StartBlock = startBlock
+		}
 	}
 
-	endBlock := context.Query("endBlock")
-	if endBlock != "" {
-		paginationData.EndBlock, _ = strconv.ParseInt(endBlock, 10, 64)
+	endBlockStr := context.Query("endBlock")
+	if endBlockStr != "" {
+		if endBlock, err := strconv.ParseInt(endBlockStr, 10, 64); err == nil {
+			paginationData.EndBlock = endBlock
+		}
 	}
 
-	page := context.Query("page")
-	if page != "" {
-		paginationData.Page, _ = strconv.Atoi(page)
+	pageStr := context.Query("page")
+	if pageStr != "" {
+		if page, err := strconv.Atoi(pageStr); err == nil {
+			paginationData.Page = page
+		}
 	}
 
-	perPage := context.Query("perPage")
-	if perPage != "" {
-		paginationData.PerPage, _ = strconv.Atoi(perPage)
+	perPageStr := context.Query("perPage")
+	if perPageStr != "" {
+		if perPage, err := strconv.Atoi(perPageStr); err == nil {
+			paginationData.PerPage = perPage
+		}
 	}
 
 	sort := context.Query("sort")

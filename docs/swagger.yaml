@@ -29,6 +29,25 @@ definitions:
       validator:
         type: string
     type: object
+  models.Log:
+    properties:
+      address:
+        type: string
+      blockHash:
+        type: string
+      blockNumber:
+        type: integer
+      data:
+        type: string
+      logIndex:
+        type: integer
+      topics:
+        items:
+          type: string
+        type: array
+      transactionHash:
+        type: string
+    type: object
   models.Transaction:
     properties:
       blockHash:
@@ -141,6 +160,117 @@ paths:
       summary: ping example
       tags:
       - example
+  /v1/log:
+    get:
+      parameters:
+      - description: address
+        in: query
+        name: address
+        type: string
+      - description: block number to start searching for logs
+        in: query
+        name: startBlock
+        type: integer
+      - description: block number to stop searching for logs
+        in: query
+        name: endBlock
+        type: integer
+      - description: topic0
+        in: query
+        name: topic0
+        type: string
+      - description: topic1
+        in: query
+        name: topic1
+        type: string
+      - description: topic2
+        in: query
+        name: topic2
+        type: string
+      - description: topic3
+        in: query
+        name: topic3
+        type: string
+      - description: operator and|or between topic0 & topic1
+        in: query
+        name: topic0_1_opr
+        type: string
+      - description: operator and|or between topic0 & topic2
+        in: query
+        name: topic0_2_opr
+        type: string
+      - description: operator and|or between topic0 & topic3
+        in: query
+        name: topic0_3_opr
+        type: string
+      - description: operator and|or between topic1 & topic2
+        in: query
+        name: topic1_2_opr
+        type: string
+      - description: operator and|or between topic1 & topic3
+        in: query
+        name: topic1_3_opr
+        type: string
+      - description: operator and|or between topic2 & topic3
+        in: query
+        name: topic2_3_opr
+        type: string
+      - description: page number
+        in: query
+        name: page
+        type: integer
+      - description: number of logs displayed per page
+        in: query
+        name: perPage
+        type: integer
+      - description: use asc to sort by ascending and desc to sort by descending
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Log'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get logs
+      tags:
+      - log
+  /v1/log/transactionhash/{transactionhash}:
+    get:
+      parameters:
+      - description: transaction hash
+        in: path
+        name: transactionhash
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Log'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get logs by transaction hash
+      tags:
+      - log
   /v1/transaction/address/{address}:
     get:
       parameters:
