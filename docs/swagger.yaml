@@ -145,21 +145,6 @@ paths:
       summary: Get block by number
       tags:
       - block
-  /v1/example/helloworld:
-    get:
-      consumes:
-      - application/json
-      description: do ping
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      summary: ping example
-      tags:
-      - example
   /v1/log:
     get:
       parameters:
@@ -373,19 +358,4 @@ paths:
       summary: Get transactions in block
       tags:
       - transaction
-  /v2/example/helloworld:
-    get:
-      consumes:
-      - application/json
-      description: do ping
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      summary: ping example
-      tags:
-      - example
 swagger: "2.0"

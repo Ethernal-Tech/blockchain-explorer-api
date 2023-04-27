@@ -7,7 +7,6 @@ import (
 	"ethernal/explorer-api/database"
 	_ "ethernal/explorer-api/docs"
 	"ethernal/explorer-api/services"
-	"net/http"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -22,6 +21,7 @@ var (
 	logController         controllers.LogController
 )
 
+/*
 // PingExample godoc
 // @Summary ping example
 // @Schemes
@@ -47,6 +47,7 @@ func Helloworld(g *gin.Context) {
 func Helloworldv2(g *gin.Context) {
 	g.JSON(http.StatusOK, "helloworld v2")
 }
+*/
 
 // @title Block Explorer API
 // @version 1.0
@@ -87,10 +88,12 @@ func main() {
 func routes() {
 	v1 := server.Group("/api/v1")
 	{
-		eg := v1.Group("/example")
-		{
-			eg.GET("/helloworld", Helloworld)
-		}
+		/*
+			eg := v1.Group("/example")
+			{
+				eg.GET("/helloworld", Helloworld)
+			}
+		*/
 
 		transaction := v1.Group("/transaction")
 		{
@@ -112,11 +115,13 @@ func routes() {
 		}
 	}
 
-	v2 := server.Group("/api/v2")
-	{
-		eg := v2.Group("/example")
+	/*
+		v2 := server.Group("/api/v2")
 		{
-			eg.GET("/helloworld", Helloworldv2)
+			eg := v2.Group("/example")
+			{
+				eg.GET("/helloworld", Helloworldv2)
+			}
 		}
-	}
+	*/
 }

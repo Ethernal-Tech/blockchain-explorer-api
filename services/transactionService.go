@@ -103,7 +103,7 @@ func (ts *TransactionService) GetTransactionsByAddress(address string, paginatio
 	dbTransactions := make([]database.Transaction, 0)
 
 	// fetch transactions from database
-	if err := ts.database.NewSelect().Model((*database.Transaction)(nil)).Where("? = ? OR ? = ?", bun.Ident("from"), address, bun.Ident("to"), address).Where("block_number BETWEEN ? AND ?", pagination.StartBlock, pagination.EndBlock).Order("block_number "+pagination.Sort).Offset(offset).Limit(pagination.PerPage).Scan(ts.ctx, &dbTransactions); err != nil {
+	if err := ts.database.NewSelect().Model((*database.Transaction)(nil)).Where("? = ? OR ? = ? OR ? = ?", bun.Ident("from"), address, bun.Ident("to"), address, bun.Ident("contract_address"), address).Where("block_number BETWEEN ? AND ?", pagination.StartBlock, pagination.EndBlock).Order("block_number "+pagination.Sort).Offset(offset).Limit(pagination.PerPage).Scan(ts.ctx, &dbTransactions); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, common.ErrNotFound
 		}
